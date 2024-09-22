@@ -37,21 +37,6 @@ bash
 Copy code
 npm start
 The app will run at http://localhost:3000.
-File Structure
-
-bash
-Copy code
-├── public
-│   ├── logo.jpeg              # Project logo
-│   └── index.html             # HTML template
-├── src
-│   ├── App.js                 # Main component
-│   ├── NavBar.js              # NavBar component
-│   ├── App.css                # Main CSS for styling
-│   ├── index.js               # Entry point for the React app
-│   └── logo.jpeg              # Logo used in the NavBar and main section
-├── package.json               # Project dependencies
-├── README.md                  # Project documentation
 Usage
 Enter a long URL: In the input field, type the URL you want to shorten and press "Shorten URL".
 View the shortened URL: After submission, a shortened version of the URL will appear below the form.
