@@ -46,9 +46,3 @@ User Authentication: Add login functionality to allow users to manage their shor
 Plans: Introduce different plans for users with additional features (e.g., analytics, custom domains).
 Contributing
 We welcome contributions! Please feel free to submit pull requests or open issues.
-
-Fork the project
-Create a feature branch (git checkout -b feature/YourFeature)
-Commit your changes (git commit -m 'Add some feature')
-Push to the branch (git push origin feature/YourFeature)
-Open a pull request
