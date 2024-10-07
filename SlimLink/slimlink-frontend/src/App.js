@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import NavBar from './NavBar'; // Assuming NavBar.js exists in the same directory
 import './App.css'; // Assuming you have some custom styles if needed
+import Login from './Pages/Login';
 import logo from './logo.jpeg'; // Import the logo image
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
 
   return (
     <>
+      <Login/>
       <NavBar /> {/* NavBar will stretch across the screen */}
       <div className="content-container">
         {/* Insert the logo image above the heading */}
