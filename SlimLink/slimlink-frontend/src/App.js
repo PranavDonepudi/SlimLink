@@ -10,7 +10,7 @@ function App() {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (longURL) {
-      const generatedShortURL = `https://sl.link/${Math.random().toString(36).substring(7)}`;
+      const generatedShortURL = `https://sl.to/${Math.random().toString(36).substring(7)}`;
       setShortURL(generatedShortURL);
     }
   };
