@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom'; // Import Link from react-router-dom for navigation
 import logo from './IMG_6350.PNG'; // Import the logo image
 
 function NavBar() {
@@ -6,9 +7,9 @@ function NavBar() {
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
       <div className="container-fluid">
         {/* Insert the logo and apply the navbar-logo class */}
-        <a className="navbar-brand" href="/">
+        <Link className="navbar-brand" to="/">
           <img src={logo} alt="SlimLink Logo" style={{ width: '150px', height: '50px' }} />
-        </a>
+        </Link>
         <button
           className="navbar-toggler"
           type="button"
@@ -23,19 +24,19 @@ function NavBar() {
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav ms-auto">
             <li className="nav-item">
-              <a className="nav-link" href="#about-us">
+              <Link className="nav-link" to="/about-us">
                 About Us
-              </a>
+              </Link>
             </li>
             <li className="nav-item">
-              <a className="nav-link" href="#plans">
+              <Link className="nav-link" to="/plans">
                 Plans
-              </a>
+              </Link>
             </li>
             <li className="nav-item">
-              <a className="nav-link" href="#login">
+              <Link className="nav-link" to="/login">
                 Login
-              </a>
+              </Link>
             </li>
           </ul>
         </div>

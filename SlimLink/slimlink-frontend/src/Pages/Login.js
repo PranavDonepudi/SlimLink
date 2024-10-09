@@ -1,58 +1,74 @@
-// Login.js
-import React, { useState } from 'react';
-import { auth } from './firebaseConfig';
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
+import React, { useState } from "react";
+import { auth } from "./firebaseConfig"; // Import the auth object
+import { signInWithEmailAndPassword } from "firebase/auth";
+import "./Login.css";
 
 const Login = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [isRegistering, setIsRegistering] = useState(false);
+  // State to hold form inputs
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleSignup = async (e) => {
-    e.preventDefault();
-    try {
-      await createUserWithEmailAndPassword(auth, email, password);
-      alert('User registered successfully');
-    } catch (error) {
-      console.error('Error during signup:', error);
-      alert(error.message);
-    }
-  };
-
+  // Function to handle login
   const handleLogin = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    setError("");
+
     try {
+      // Firebase email/password sign-in
       await signInWithEmailAndPassword(auth, email, password);
-      alert('User logged in successfully');
-    } catch (error) {
-      console.error('Error during login:', error);
-      alert(error.message);
+      alert("Logged in successfully!");
+    } catch (err) {
+      // Handle errors, display error message
+      setError("Failed to log in. Please check your credentials.");
+      console.error("Login error:", err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div>
-      <h2>{isRegistering ? 'Sign Up' : 'Login'}</h2>
-      <form onSubmit={isRegistering ? handleSignup : handleLogin}>
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        <button type="submit">{isRegistering ? 'Sign Up' : 'Login'}</button>
+    <div style={{ maxWidth: "400px", margin: "auto", padding: "2rem" }}>
+      <h2>Login</h2>
+      {error && <p style={{ color: "red" }}>{error}</p>}
+      <form onSubmit={handleLogin}>
+        <div style={{ marginBottom: "1rem" }}>
+          <label>Email</label>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            style={{ width: "100%", padding: "8px", margin: "8px 0" }}
+          />
+        </div>
+        <div style={{ marginBottom: "1rem" }}>
+          <label>Password</label>
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            style={{ width: "100%", padding: "8px", margin: "8px 0" }}
+          />
+        </div>
+        <button
+          type="submit"
+          disabled={loading}
+          style={{
+            width: "100%",
+            padding: "10px",
+            backgroundColor: "#6200EE",
+            color: "#fff",
+            border: "none",
+            cursor: "pointer",
+          }}
+        >
+          {loading ? "Logging in..." : "Login"}
+        </button>
       </form>
-      <button onClick={() => setIsRegistering(!isRegistering)}>
-        {isRegistering ? 'Already have an account? Login' : 'Need an account? Sign Up'}
-      </button>
     </div>
   );
 };
