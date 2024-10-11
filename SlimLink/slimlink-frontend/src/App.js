@@ -4,6 +4,9 @@ import NavBar from './NavBar'; // Assuming NavBar.js exists in the same director
 import Login from './Pages/Login'; // Import the Login page
 import './App.css'; // Assuming you have some custom styles
 import logo from './logo.jpeg'; // Import the logo image
+import ComplianceAndCertification from './Pages/ComplianceAndCertification'; // Import Compliance section
+import BeyondSlim from './Pages/BeyondSlim'; // Import Beyond the Link section
+
 
 function UrlShortener() {
   const [longURL, setLongURL] = useState('');
@@ -15,6 +18,14 @@ function UrlShortener() {
       const generatedShortURL = `https://sl.to/${Math.random().toString(36).substring(7)}`;
       setShortURL(generatedShortURL);
     }
+  };
+
+  // Scroll to the bottom of the page
+  const scrollToBottom = () => {
+    window.scrollTo({
+      top: document.documentElement.scrollHeight,
+      behavior: 'smooth',
+    });
   };
 
   return (
@@ -44,6 +55,15 @@ function UrlShortener() {
           <a href={shortURL} target="_blank" rel="noopener noreferrer">{shortURL}</a>
         </div>
       )}
+
+      {/* Include the BeyondLink and ComplianceAndCertification sections */}
+      <div className="additional-info">
+        <BeyondSlim/>
+        <ComplianceAndCertification/>
+      </div>
+
+      {/* Scroll Down Button */}
+      <button className="scroll-down-button" onClick={scrollToBottom}>Scroll for More</button>
     </div>
   );
 }
@@ -51,12 +71,9 @@ function UrlShortener() {
 function App() {
   return (
     <Router>
-      <NavBar /> {/* Navigation Bar remains constant across all routes */}
+      <NavBar />
       <Routes>
-        {/* Define the Login route */}
         <Route path="/login" element={<Login />} />
-
-        {/* Define the URL shortener page route (main page) */}
         <Route path="/" element={<UrlShortener />} />
       </Routes>
     </Router>

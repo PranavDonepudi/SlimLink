@@ -15,7 +15,7 @@ body, html {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 100vh; /* Full viewport height */
+  min-height: 200vh; /* Allow space for the content to be centered but leave room for the footer */
   padding: 20px;
   text-align: center;
 }
@@ -27,9 +27,9 @@ h1 {
 
 /* Styling the logo image */
 .logo {
-  width: 150px; /* Adjust the width of the logo */
+  width: 150px;
   height: auto;
-  margin-bottom: 20px; /* Space between logo and heading */
+  margin-bottom: 20px;
 }
 
 /* Make the form controls look nice */
@@ -57,4 +57,73 @@ h1 {
 
 .shortened-url a:hover {
   text-decoration: underline;
+}
+
+/* Additional info section (BeyondSlim & ComplianceAndCertification) */
+.additional-info {
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-start;
+  margin-top: auto; /* Pushes this section to the bottom */
+  padding: 20px;
+  width: 100%;
+}
+
+.compliance-certification, .beyond-slim {
+  width: 45%; /* Set equal width for both sections */
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  background-color: #f9f9f9;
+  text-align: left;
+}
+
+.compliance-certification h2, .beyond-slim h2 {
+  font-size: 1.8rem;
+  margin-bottom: 15px;
+}
+
+.compliance-certification p, .beyond-slim p {
+  font-size: 1.2rem;
+}
+
+.compliance-certification ul, .beyond-slim ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.compliance-certification li, .beyond-slim li {
+  font-size: 1.1rem;
+  margin-bottom: 10px;
+  padding-left: 20px;
+  position: relative;
+}
+
+.compliance-certification li::before, .beyond-slim li::before {
+  content: '✔'; /* A checkmark icon before each list item */
+  position: absolute;
+  left: 0;
+  color: #28a745; /* Green color for checkmark */
+  font-size: 1.2rem;
+  top: 0;
+}
+
+/* Scroll Down Button */
+.scroll-down-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease;
+}
+
+.scroll-down-button:hover {
+  background-color: #0056b3;
 }
