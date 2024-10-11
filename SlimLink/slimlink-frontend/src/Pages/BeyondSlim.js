@@ -6,7 +6,7 @@ function BeyondSlim() {
     <div className="beyond-slim">
       <h2>Beyond Slim</h2>
       <p>
-        A URL is more than just a link. It's your brand, youre trust, and analytics.
+        A URL is more than just a link. It's your brand, your trust, and analytics.
         With SlimLink, rest assured you can
         :
       </p>
