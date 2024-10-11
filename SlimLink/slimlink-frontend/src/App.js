@@ -15,7 +15,12 @@ function UrlShortener() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (longURL) {
+
+    
+    const regularexpress = /^(https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(:\d+)?(\/\S*)?$/;
+    const ifValid =  regularexpress.test(longURL);
+
+    if (ifValid) {
       const generatedShortURL = `https://sl.to/${Math.random().toString(36).substring(7)}`;
       setShortURL(generatedShortURL);
 
@@ -24,7 +29,9 @@ function UrlShortener() {
 
       // Stop spinning after 2 seconds (or any duration you prefer)
       setTimeout(() => setIsSpinning(false), 2000);
-    }
+    } else {
+      setShortURL("Please Enter A Valid URL!")
+    };
   };
 
   // Scroll to the bottom of the page
