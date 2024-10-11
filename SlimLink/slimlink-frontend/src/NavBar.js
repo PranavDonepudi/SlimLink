@@ -8,7 +8,8 @@ function NavBar() {
       <div className="container-fluid">
         {/* Insert the logo and apply the navbar-logo class */}
         <Link className="navbar-brand" to="/">
-          <img src={logo} alt="SlimLink Logo" style={{ width: '150px', height: '50px' }} />
+          <img src={logo} alt="SlimLink Logo" style={{ width: '150px', height: '40px', objectFit: 'contain' }}
+          />
         </Link>
         <button
           className="navbar-toggler"
