@@ -11,12 +11,19 @@ import BeyondSlim from './Pages/BeyondSlim'; // Import Beyond the Link section
 function UrlShortener() {
   const [longURL, setLongURL] = useState('');
   const [shortURL, setShortURL] = useState('');
+  const [isSpinning, setIsSpinning] = useState(false); // State to control logo spinning
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (longURL) {
       const generatedShortURL = `https://sl.to/${Math.random().toString(36).substring(7)}`;
       setShortURL(generatedShortURL);
+
+      // Start the logo spinning
+      setIsSpinning(true);
+
+      // Stop spinning after 2 seconds (or any duration you prefer)
+      setTimeout(() => setIsSpinning(false), 2000);
     }
   };
 
@@ -30,7 +37,9 @@ function UrlShortener() {
 
   return (
     <div className="content-container">
-      <img src={logo} alt="SlimLink Logo" className="logo" />
+      <img src={logo} alt="SlimLink Logo"
+      className={`logo ${isSpinning ? 'spinning' : ''}`} // Apply 'spinning' class based on state
+      />
       <h1>SlimLink URL Shortener</h1>
 
       <form onSubmit={handleSubmit}>
@@ -56,7 +65,7 @@ function UrlShortener() {
         </div>
       )}
 
-      {/* Include the BeyondLink and ComplianceAndCertification sections */}
+      {/* Including BeyondSlim & ComplianceAndCertification sections */}
       <div className="additional-info">
         <BeyondSlim/>
         <ComplianceAndCertification/>
