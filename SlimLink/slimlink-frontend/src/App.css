@@ -30,7 +30,7 @@ h1 {
   width: 150px;
   height: auto;
   margin-bottom: 20px;
-  animation: spin 0.1s linear; /* Spins the logo infinitely every 2 seconds */
+  animation: spin 0.1s linear; /* Spins the logo every x seconds */
 }
 
 /* Keyframes for spinning animation */
@@ -48,11 +48,6 @@ h1 {
   width: 150px;
   height: auto;
   margin-bottom: 20px;
-}
-
-/* Spinning class applied on button click */
-.spinning {
-  animation: spin 0.1s linear; /* Spins the logo for 2 seconds when the button is clicked */
 }
 
 /* Button styling */

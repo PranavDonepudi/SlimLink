@@ -23,8 +23,13 @@ function UrlShortener() {
       const generatedShortURL = `https://sl.to/${Math.random().toString(36).substring(7)}`;
       setShortURL(generatedShortURL);
 
-      // Start the logo spinning
+      // Start logo spinning
       setIsSpinning(true);
+
+      // Stop spinning after 2 seconds
+      setTimeout(() => setIsSpinning(false), 2000);
+    } else {
+      setShortURL("Please Enter A Valid URL!")
     };
   };
 
