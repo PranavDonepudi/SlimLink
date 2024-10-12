@@ -20,8 +20,12 @@ function UrlShortener() {
     const ifValid =  regularexpress.test(longURL);
 
     if (ifValid) {
-      const generatedShortURL = `https://sl.to/${Math.random().toString(36).substring(7)}`;
-      setShortURL(generatedShortURL);
+      function generateShortURL(length = 5) {
+        return `https://sl.to/${[...Array(length)].map(() => Math.random().toString(36)[2]).join('')}`;
+      }
+      const shortenedURL = generateShortURL(5);
+      setShortURL(shortenedURL);
+      console.log(generateShortURL);
 
       // Start logo spinning
       setIsSpinning(true);
