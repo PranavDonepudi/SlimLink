@@ -5,7 +5,7 @@ import Login from './Pages/Login'; // Import the Login page
 import './App.css'; // Assuming you have some custom styles
 import logo from './logo.jpeg'; // Import the logo image
 import ComplianceAndCertification from './Pages/ComplianceAndCertification'; // Import Compliance section
-import BeyondSlim from './Pages/BeyondSlim'; // Import Beyond the Link section
+import BeyondSlim from './Pages/BeyondSlim'; // Import BeyondSlim section
 
 
 function UrlShortener() {
@@ -15,7 +15,6 @@ function UrlShortener() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
     
     const regularexpress = /^(https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(:\d+)?(\/\S*)?$/;
     const ifValid =  regularexpress.test(longURL);
@@ -26,11 +25,6 @@ function UrlShortener() {
 
       // Start the logo spinning
       setIsSpinning(true);
-
-      // Stop spinning after 2 seconds (or any duration you prefer)
-      setTimeout(() => setIsSpinning(false), 2000);
-    } else {
-      setShortURL("Please Enter A Valid URL!")
     };
   };
 
