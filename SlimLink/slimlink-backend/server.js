@@ -31,7 +31,7 @@ const urlSchema = new mongoose.Schema({
 const URL = mongoose.model('URL', urlSchema);
 
 //Generate the shorter link function
-function generateShortURL(length = 5) {
+function generateShortURL(length = 6) {
     return `https://sl.to/${[...Array(length)].map(() => Math.random().toString(36)[2]).join('')}`;
 }
 
