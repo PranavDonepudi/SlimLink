@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import NavBar from './NavBar'; // Assuming NavBar.js exists in the same directory
 import Login from './Pages/Login'; // Import the Login page
@@ -13,28 +13,29 @@ function UrlShortener() {
   const [shortURL, setShortURL] = useState('');
   const [isSpinning, setIsSpinning] = useState(false); // State to control logo spinning
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    const regularexpress = /^(https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(:\d+)?(\/\S*)?$/;
-    const ifValid =  regularexpress.test(longURL);
+    setIsSpinning(true); // Start spinning the logo
+    try {
+      const response = await fetch("http://localhost:5001/shorten", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ longURL }),
+      });
 
-    if (ifValid) {
-      function generateShortURL(length = 5) {
-        return `https://sl.to/${[...Array(length)].map(() => Math.random().toString(36)[2]).join('')}`;
+      if (response.ok) {
+        const data = await response.json();
+        setShortURL(data.shortURL); 
+      } else {
+        const errorData = await response.json();
+        setShortURL(errorData.error);
       }
-      const shortenedURL = generateShortURL(5);
-      setShortURL(shortenedURL);
-      console.log(generateShortURL);
 
-      // Start logo spinning
-      setIsSpinning(true);
-
-      // Stop spinning after 2 seconds
       setTimeout(() => setIsSpinning(false), 2000);
-    } else {
-      setShortURL("Please Enter A Valid URL!")
-    };
+    } catch (error) {
+      console.error("Invalid URL", error);
+      
+    }
   };
 
   // Scroll to the bottom of the page
@@ -88,6 +89,7 @@ function UrlShortener() {
 }
 
 function App() {
+  
   return (
     <Router>
       <NavBar />
@@ -100,3 +102,4 @@ function App() {
 }
 
 export default App;
+

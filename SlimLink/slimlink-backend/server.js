@@ -10,7 +10,11 @@ const cors = require('cors');
 
 const app = express();
 //Allow frontend to communicate with backend since they are on different ports
-app.use(cors());
+const corsOptions = {
+  origin: "http://localhost:3000", 
+  optionsSuccessStatus: 200,
+};
+app.use(cors(corsOptions));
 app.use(express.json());
 
 app.listen(5001, () => console.log("Server running on port 5001"));
@@ -87,3 +91,4 @@ app.get('/:shortURL', async (req, res) => {
       res.status(404).json({ error: "URL not found" });
     }
   });
+
