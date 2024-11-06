@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import NavBar from './NavBar'; // Assuming NavBar.js exists in the same directory
 import Login from './Pages/Login'; // Import the Login page
@@ -6,36 +6,36 @@ import './App.css'; // Assuming you have some custom styles
 import logo from './logo.jpeg'; // Import the logo image
 import ComplianceAndCertification from './Pages/ComplianceAndCertification'; // Import Compliance section
 import BeyondSlim from './Pages/BeyondSlim'; // Import BeyondSlim section
-
+import About from './Pages/About'; // Import the About page
+import Plans from './Pages/Plans'; // Import the PLans page
 
 function UrlShortener() {
   const [longURL, setLongURL] = useState('');
   const [shortURL, setShortURL] = useState('');
   const [isSpinning, setIsSpinning] = useState(false); // State to control logo spinning
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    setIsSpinning(true); // Start spinning the logo
-    try {
-      const response = await fetch("http://localhost:5001/shorten", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ longURL }),
-      });
+    
+    const regularexpress = /^(https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(:\d+)?(\/\S*)?$/;
+    const ifValid =  regularexpress.test(longURL);
 
-      if (response.ok) {
-        const data = await response.json();
-        setShortURL(data.shortURL); 
-      } else {
-        const errorData = await response.json();
-        setShortURL(errorData.error);
+    if (ifValid) {
+      function generateShortURL(length = 5) {
+        return `https://sl.to/${[...Array(length)].map(() => Math.random().toString(36)[2]).join('')}`;
       }
+      const shortenedURL = generateShortURL(5);
+      setShortURL(shortenedURL);
+      console.log(generateShortURL);
 
+      // Start logo spinning
+      setIsSpinning(true);
+
+      // Stop spinning after 2 seconds
       setTimeout(() => setIsSpinning(false), 2000);
-    } catch (error) {
-      console.error("Invalid URL", error);
-      
-    }
+    } else {
+      setShortURL("Please Enter A Valid URL!")
+    };
   };
 
   // Scroll to the bottom of the page
@@ -89,17 +89,19 @@ function UrlShortener() {
 }
 
 function App() {
-  
   return (
     <Router>
       <NavBar />
       <Routes>
         <Route path="/login" element={<Login />} />
+        <Route path="/about-us" element={<About />} />
+        <Route path="/plans" element={<Plans />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/" element={<UrlShortener />} />
+
       </Routes>
     </Router>
   );
 }
 
 export default App;
-
