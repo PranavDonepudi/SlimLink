@@ -1,4 +1,6 @@
 // In UrlShortener Component (in App.js)
+// Run "npm install mdb-react-ui-kit" & "npm install @fortawesome/fontawesome-free" to implement footer
+
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import NavBar from './NavBar';
@@ -6,9 +8,19 @@ import Login from './Pages/Login';
 import './App.css';
 import logo from './logo.jpeg';
 import ComplianceAndCertification from './Pages/ComplianceAndCertification';
+import '@fortawesome/fontawesome-free/css/all.min.css';
 import BeyondSlim from './Pages/BeyondSlim';
 import About from './Pages/About';
 import Plans from './Pages/Plans';
+import {
+  MDBFooter,
+  MDBContainer,
+  MDBIcon,
+  MDBInput,
+  MDBCol,
+  MDBRow,
+  MDBBtn
+} from 'mdb-react-ui-kit';
 
 function UrlShortener() {
   const [longURL, setLongURL] = useState('');
@@ -25,7 +37,7 @@ function UrlShortener() {
       function generateShortURL(length = 6) {
         return `https://sl.to/${[...Array(length)].map(() => Math.random().toString(36)[2]).join('')}`;
       }
-      const shortenedURL = generateShortURL(5);
+      const shortenedURL = generateShortURL(6);
       setShortURL(shortenedURL);
       console.log(generateShortURL);
 
@@ -110,16 +122,75 @@ function UrlShortener() {
 
 function App() {
   return (
-    <Router>
-      <NavBar />
-      <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/about-us" element={<About />} />
-        <Route path="/plans" element={<Plans />} />
-        <Route path="/" element={<UrlShortener />} />
-      </Routes>
-    </Router>
+    <>
+      <Router>
+        <NavBar />
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/about-us" element={<About />} />
+          <Route path="/plans" element={<Plans />} />
+          <Route path="/" element={<UrlShortener />} />
+        </Routes>
+      </Router>
+
+      <MDBFooter className="text-center" color="white" bgColor="dark">
+        <MDBContainer className="p-4">
+          <section className="mb-4">
+            <MDBBtn outline color="light" floating className="m-1" href="#!" role="button">
+              <MDBIcon fab icon="facebook-f" />
+            </MDBBtn>
+            <MDBBtn outline color="light" floating className="m-1" href="#!" role="button">
+              <MDBIcon fab icon="twitter" />
+            </MDBBtn>
+            <MDBBtn outline color="light" floating className="m-1" href="#!" role="button">
+              <MDBIcon fab icon="google" />
+            </MDBBtn>
+            <MDBBtn outline color="light" floating className="m-1" href="#!" role="button">
+              <MDBIcon fab icon="instagram" />
+            </MDBBtn>
+            <MDBBtn outline color="light" floating className="m-1" href="#!" role="button">
+              <MDBIcon fab icon="linkedin-in" />
+            </MDBBtn>
+            <MDBBtn outline color="light" floating className="m-1" href="#!" role="button">
+              <MDBIcon fab icon="github" />
+            </MDBBtn>
+          </section>
+
+          {/*
+          <section className="">
+            <form action="">
+              <MDBRow className="d-flex justify-content-center">
+                <MDBCol size="auto">
+                  <p className="pt-2">
+                    <strong>Sign up for our newsletter</strong>
+                  </p>
+                </MDBCol>
+                <MDBCol md="5" start>
+                  <MDBInput contrast type="email" label="Email address" className="mb-4" />
+                </MDBCol>
+                <MDBCol size="auto">
+                  <MDBBtn outline color="light" type="submit" className="mb-4">
+                    Subscribe
+                  </MDBBtn>
+                </MDBCol>
+              </MDBRow>
+            </form>
+          </section>
+          */}
+
+          <section className="mb-4">
+            <p>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Sunt distinctio earum repellat quaerat
+              voluptatibus placeat nam, commodi optio pariatur est quia magnam eum harum corrupti dicta, aliquam
+              sequi voluptate quas.
+            </p>
+          </section>
+        </MDBContainer>
+        <div className="text-center p-3" style={{ backgroundColor: "rgba(0, 0, 0, 0.2)" }}>
+          © 2024 SlimLink
+        </div>
+      </MDBFooter>
+    </>
   );
 }
-
 export default App;
