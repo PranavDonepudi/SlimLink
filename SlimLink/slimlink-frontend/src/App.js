@@ -1,17 +1,18 @@
 // In UrlShortener Component (in App.js)
 // Run "npm install mdb-react-ui-kit" & "npm install @fortawesome/fontawesome-free" to implement footer
 
-import React, { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import NavBar from './NavBar';
-import Login from './Pages/Login';
-import './App.css';
-import logo from './logo.jpeg';
 import ComplianceAndCertification from './Pages/ComplianceAndCertification';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { signInWithEmailAndPassword } from 'firebase/auth';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import BeyondSlim from './Pages/BeyondSlim';
+import React, { useState } from 'react';
+import Login from './Pages/Login';
 import About from './Pages/About';
 import Plans from './Pages/Plans';
+import logo from './logo.jpeg';
+import NavBar from './NavBar';
+import './App.css';
 import {
   MDBFooter,
   MDBContainer,
@@ -48,12 +49,16 @@ function UrlShortener() {
     };
   };
 
+  const scrollIncrement = 0.25; 
   const scrollToBottom = () => {
+    const currentScroll = window.scrollY || document.documentElement.scrollTop;
+    const targetScroll = currentScroll + document.documentElement.scrollHeight * scrollIncrement;
+
     window.scrollTo({
-      top: document.documentElement.scrollHeight,
-      behavior: 'smooth',
-    });
-  };
+      top: targetScroll,
+      behavior: 'smooth'
+    }) 
+  }
 
   return (
     <div className="content-container">
@@ -111,8 +116,8 @@ function UrlShortener() {
 
       {/*container for side-by-side layout */}
       <div className="side-by-side-container">
-      <BeyondSlim />
-      <ComplianceAndCertification />
+        <BeyondSlim />
+        <ComplianceAndCertification />
       </div>
 
       <button className="scroll-down-button" onClick={scrollToBottom}>Scroll for More</button>
@@ -156,7 +161,7 @@ function App() {
             </MDBBtn>
           </section>
 
-          {/* <section className="email">
+        {/* <section className="email">
             <form action="">
               <MDBRow className="d-flex justify-content-center">
                 <MDBCol size="auto">
@@ -174,12 +179,13 @@ function App() {
                 </MDBCol>
               </MDBRow>
             </form>
-          </section> */}
+          </section> 
+        */}
 
           <section className="terms">
             <MDBRow>
               <MDBCol lg="3" md="6" className="mb-4 mb-md-0">
-                <h5 className="text-uppercase">Terms</h5>
+                <h5 className="text-uppercase">Terms & Conditions</h5>
                 <ul className="list-unstyled mb-0">
                   <li><a href="#!" className="text-white">Terms & conditions</a></li>
                   <li><a href="#!" className="text-white">Privacy policy</a></li>
@@ -216,14 +222,15 @@ function App() {
               </MDBCol>
             </MDBRow>
           </section>
-{/* 
+        {/* 
           <section className="mb-4">
             <p>
               Lorem ipsum dolor sit amet consectetur adipisicing elit. Sunt distinctio earum repellat quaerat
               voluptatibus placeat nam, commodi optio pariatur est quia magnam eum harum corrupti dicta, aliquam
               sequi voluptate quas.
             </p>
-          </section> */}
+          </section> 
+        */}
 
         </MDBContainer>
         <div className="text-center p-3" style={{ backgroundColor: "rgba(0, 0, 0, 0.2)" }}>

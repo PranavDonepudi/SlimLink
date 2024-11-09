@@ -93,12 +93,13 @@ h1 {
 }
 
 /* Side-by-Side Layout for Compliance and BeyondSlim */
+/* Adjusting .side-by-side-container */
 .side-by-side-container {
   display: flex;
   gap: 20px;
   justify-content: center;
   align-items: flex-start;
-  margin: 40px 0; /* Adding margin to space it out */
+  margin: 100px 30px 0px; /* Remove any bottom margin */
 }
 
 .compliance-certification, .beyond-slim {
@@ -108,11 +109,11 @@ h1 {
 
 .compliance-certification h2, .beyond-slim h2 {
   font-size: 1.8rem;
-  margin-bottom: 15px;
 }
 
 .compliance-certification p, .beyond-slim p {
   font-size: 1.2rem;
+  margin-bottom: auto;
 }
 
 .compliance-certification ul, .beyond-slim ul {
@@ -229,8 +230,12 @@ h1 {
   color: #fff;
   padding: 20px;
   text-align: center;
-  margin-top: 40px;
-  position: relative;
+  margin-top: 0;
+  overflow: hidden;
+  border-top: none;
+  position: absolute; /* Position footer at the bottom */
+  bottom: 0;
+  width: 100%; /* Ensure footer spans the full width of the page */
 }
 
 .footer .social-icons {
@@ -242,7 +247,6 @@ h1 {
   font-size: 1.5rem;
   margin: 10px;
 }
-
 
 .footer-text {
   font-size: 0.9rem;
