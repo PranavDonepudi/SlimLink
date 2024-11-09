@@ -83,11 +83,11 @@ function UrlShortener() {
         </div>
         <div className="platform-features">
           <div className="feature-card">
-            <h3>URL Shortener</h3>
+            <h3>Slimmest URLs</h3>
             <p>A comprehensive solution to help make every point of connection between your content and audience more powerful.</p>
           </div>
           <div className="feature-card">
-            <h3>QR Codes</h3>
+            <h3>Real-time Analysics</h3>
             <p>QR Code solutions for every customer, business, and brand experience.</p>
           </div>
           <div className="feature-card">
