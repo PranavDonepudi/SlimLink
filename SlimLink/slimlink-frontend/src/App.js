@@ -1,18 +1,19 @@
+// In UrlShortener Component (in App.js)
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import NavBar from './NavBar'; // Assuming NavBar.js exists in the same directory
-import Login from './Pages/Login'; // Import the Login page
-import './App.css'; // Assuming you have some custom styles
-import logo from './logo.jpeg'; // Import the logo image
-import ComplianceAndCertification from './Pages/ComplianceAndCertification'; // Import Compliance section
-import BeyondSlim from './Pages/BeyondSlim'; // Import BeyondSlim section
-import About from './Pages/About'; // Import the About page
-import Plans from './Pages/Plans'; // Import the PLans page
+import NavBar from './NavBar';
+import Login from './Pages/Login';
+import './App.css';
+import logo from './logo.jpeg';
+import ComplianceAndCertification from './Pages/ComplianceAndCertification';
+import BeyondSlim from './Pages/BeyondSlim';
+import About from './Pages/About';
+import Plans from './Pages/Plans';
 
 function UrlShortener() {
   const [longURL, setLongURL] = useState('');
   const [shortURL, setShortURL] = useState('');
-  const [isSpinning, setIsSpinning] = useState(false); // State to control logo spinning
+  const [isSpinning, setIsSpinning] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -21,24 +22,20 @@ function UrlShortener() {
     const ifValid =  regularexpress.test(longURL);
 
     if (ifValid) {
-      function generateShortURL(length = 5) {
+      function generateShortURL(length = 6) {
         return `https://sl.to/${[...Array(length)].map(() => Math.random().toString(36)[2]).join('')}`;
       }
       const shortenedURL = generateShortURL(5);
       setShortURL(shortenedURL);
       console.log(generateShortURL);
 
-      // Start logo spinning
       setIsSpinning(true);
-
-      // Stop spinning after 2 seconds
       setTimeout(() => setIsSpinning(false), 2000);
     } else {
       setShortURL("Please Enter A Valid URL!")
     };
   };
 
-  // Scroll to the bottom of the page
   const scrollToBottom = () => {
     window.scrollTo({
       top: document.documentElement.scrollHeight,
@@ -49,7 +46,7 @@ function UrlShortener() {
   return (
     <div className="content-container">
       <img src={logo} alt="SlimLink Logo"
-      className={`logo ${isSpinning ? 'spinning' : ''}`} // Apply 'spinning' class based on state
+      className={`logo ${isSpinning ? 'spinning' : ''}`}
       />
       <h1>SlimLink URL Shortener</h1>
 
@@ -76,13 +73,36 @@ function UrlShortener() {
         </div>
       )}
 
-      {/* Including BeyondSlim & ComplianceAndCertification sections */}
-      <div className="additional-info">
-        <BeyondSlim/>
-        <ComplianceAndCertification/>
+      {/* Slimlink Connection Platform Section */}
+      <section className="connection-platform">
+        <h2>The Slimlink Connection Platform</h2>
+        <p>All the products you need to build brand connections, manage links, and connect with audiences everywhere in a single unified platform.</p>
+        <div className="platform-buttons">
+          <button className="cta-button">Get started for free</button>
+          <button className="cta-button outline">Get a quote</button>
+        </div>
+        <div className="platform-features">
+          <div className="feature-card">
+            <h3>URL Shortener</h3>
+            <p>A comprehensive solution to help make every point of connection between your content and audience more powerful.</p>
+          </div>
+          <div className="feature-card">
+            <h3>QR Codes</h3>
+            <p>QR Code solutions for every customer, business, and brand experience.</p>
+          </div>
+          <div className="feature-card">
+            <h3>Landing Pages</h3>
+            <p>Create engaging, mobile-optimized landing pages in minutes.</p>
+          </div>
+        </div>
+      </section>
+
+      {/*container for side-by-side layout */}
+      <div className="side-by-side-container">
+      <BeyondSlim />
+      <ComplianceAndCertification />
       </div>
 
-      {/* Scroll Down Button */}
       <button className="scroll-down-button" onClick={scrollToBottom}>Scroll for More</button>
     </div>
   );
@@ -96,9 +116,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/about-us" element={<About />} />
         <Route path="/plans" element={<Plans />} />
-        <Route path="/login" element={<Login />} />
         <Route path="/" element={<UrlShortener />} />
-
       </Routes>
     </Router>
   );
