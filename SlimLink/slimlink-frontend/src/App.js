@@ -156,8 +156,7 @@ function App() {
             </MDBBtn>
           </section>
 
-          {/*
-          <section className="">
+          {/* <section className="email">
             <form action="">
               <MDBRow className="d-flex justify-content-center">
                 <MDBCol size="auto">
@@ -175,16 +174,57 @@ function App() {
                 </MDBCol>
               </MDBRow>
             </form>
-          </section>
-          */}
+          </section> */}
 
+          <section className="terms">
+            <MDBRow>
+              <MDBCol lg="3" md="6" className="mb-4 mb-md-0">
+                <h5 className="text-uppercase">Terms</h5>
+                <ul className="list-unstyled mb-0">
+                  <li><a href="#!" className="text-white">Terms & conditions</a></li>
+                  <li><a href="#!" className="text-white">Privacy policy</a></li>
+                  <li><a href="#!" className="text-white">Anti spam policy</a></li>
+                  <li><a href="#!" className="text-white">Cookie policy</a></li>
+                </ul>
+              </MDBCol>
+              
+              <MDBCol lg="3" md="7" className="mb-4 mb-md-0">
+                <h5 className="text-uppercase">Support</h5>
+                <ul className="list-unstyled mb-0">
+                  <li><a href="#!" className="text-white">Contact Us</a></li>
+                  <li><a href="#!" className="text-white">Help Center</a></li>
+                  <li><a href="#!" className="text-white">FAQ</a></li>
+                </ul>
+              </MDBCol>
+
+              <MDBCol lg="3" md="6" className="mb-4 mb-md-0">
+                <h5 className="text-uppercase">Resources</h5>
+                <ul className="list-unstyled mb-0">
+                  <li><a href="#!" className="text-white">Blog</a></li>
+                  <li><a href="#!" className="text-white">Guides</a></li>
+                  <li><a href="#!" className="text-white">Webinars</a></li>
+                </ul>
+              </MDBCol>
+
+              <MDBCol lg="3" md="6" className="mb-4 mb-md-0">
+                <h5 className="text-uppercase">Company</h5>
+                <ul className="list-unstyled mb-0">
+                  <li><a href="#!" className="text-white">About Us</a></li>
+                  <li><a href="#!" className="text-white">Careers</a></li>
+                  <li><a href="#!" className="text-white">Press</a></li>
+                </ul>
+              </MDBCol>
+            </MDBRow>
+          </section>
+{/* 
           <section className="mb-4">
             <p>
               Lorem ipsum dolor sit amet consectetur adipisicing elit. Sunt distinctio earum repellat quaerat
               voluptatibus placeat nam, commodi optio pariatur est quia magnam eum harum corrupti dicta, aliquam
               sequi voluptate quas.
             </p>
-          </section>
+          </section> */}
+
         </MDBContainer>
         <div className="text-center p-3" style={{ backgroundColor: "rgba(0, 0, 0, 0.2)" }}>
           © 2024 SlimLink

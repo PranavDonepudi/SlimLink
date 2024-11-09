@@ -101,8 +101,7 @@ h1 {
   margin: 40px 0; /* Adding margin to space it out */
 }
 
-.compliance-certification,
-.beyond-slim {
+.compliance-certification, .beyond-slim {
   flex: 1; /* Take equal space in the container */
   min-width: 300px; /* Setting min. width to keep content readable */
 }
@@ -209,7 +208,7 @@ h1 {
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  width: auto;
+  width: 400px;
   margin: 15px;
   text-align: left;
 }
@@ -241,8 +240,9 @@ h1 {
 .footer .social-icons a {
   color: #ffffff;
   font-size: 1.5rem;
-  margin: 0 10px;
+  margin: 10px;
 }
+
 
 .footer-text {
   font-size: 0.9rem;
