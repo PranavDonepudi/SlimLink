@@ -35,7 +35,7 @@ Ensure you have the following installed:
     ```bash
     npm install
     ```
-3. Start the development server:
+3. Start the development server (cd to both frontend and backend folder):
     ```bash
     npm start
     ```
