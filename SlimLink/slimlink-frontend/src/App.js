@@ -190,7 +190,7 @@ function App() {
                   <li><a href="#!" className="text-white">Terms & conditions</a></li>
                   <li><a href="#!" className="text-white">Privacy policy</a></li>
                   <li><a href="#!" className="text-white">Anti spam policy</a></li>
-                  <li><a href="#!" className="text-white">Cookie policy</a></li>
+                  {/* <li><a href="#!" className="text-white">Cookie policy</a></li> */}
                 </ul>
               </MDBCol>
               
