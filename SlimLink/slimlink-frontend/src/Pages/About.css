@@ -1,0 +1,168 @@
+/* About.css */
+
+.about-container {
+    font-family: Arial, sans-serif;
+    color: #333;
+    line-height: 1.6;
+    padding: 20px;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+  
+  .hero-section {
+    text-align: center;
+    background-color: #f5f5f5;
+    padding: 50px 20px;
+    margin-bottom: 40px;
+  }
+  
+  .hero-section h1 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+  }
+  
+  .hero-section p {
+    font-size: 1.2rem;
+    color: #555;
+  }
+  
+  .story-section, .mission-section, .features-section, .cta-section {
+    margin-bottom: 40px;
+  }
+  
+  .story-section h2, .mission-section h2, .features-section h2, .cta-section h2 {
+    font-size: 2rem;
+    margin-bottom: 15px;
+    color: #007bff;
+  }
+  
+  .story-section p, .mission-section p, .features-section p, .cta-section p {
+    font-size: 1rem;
+    color: #666;
+  }
+  
+  .features-section ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .features-section li {
+    margin-bottom: 15px;
+    padding-left: 20px;
+    position: relative;
+  }
+  
+  .features-section li::before {
+    content: '✔';
+    position: absolute;
+    left: 0;
+    color: #28a745;
+  }
+  
+  .cta-section {
+    text-align: center;
+    background-color: #007bff;
+    color: white;
+    padding: 40px 20px;
+    border-radius: 8px;
+  }
+  
+  .cta-section h2 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+  }
+  
+  .cta-section p {
+    font-size: 1.1rem;
+    color: white;
+    margin-bottom: 20px;
+  }
+  
+  .cta-button {
+    background-color: #0056b3;
+    color: white;
+    padding: 10px 20px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .cta-button:hover {
+    background-color: #003f7f;
+  }
+  
+/* About.css */
+
+.team-section {
+    padding: 40px 20px;
+    text-align: center;
+    background-color: #f9f9f9;
+  }
+  
+  .team-section h2 {
+    font-size: 2rem;
+    color: #1a1a1a;
+    margin-bottom: 20px;
+  }
+  
+  .team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .team-member {
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    text-align: center;
+    transition: transform 0.3s;
+  }
+  
+  .team-member:hover {
+    transform: translateY(-5px);
+  }
+  
+  .team-member-photo {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+  }
+  
+  .team-member h3 {
+    font-size: 1.2rem;
+    color: #333;
+    margin: 10px 0 5px;
+  }
+  
+  .team-member p {
+    font-size: 0.9rem;
+    color: #777;
+  }
+  
+  .show-bio-button {
+    margin-top: 10px;
+    color: #007bff;
+    background: none;
+    border: none;
+    font-size: 0.9rem;
+    cursor: pointer;
+    text-decoration: underline;
+  }
+  
+  .show-bio-button:hover {
+    color: #0056b3;
+  }
+  
+  .team-member-photo {
+    width: 150px; /* Set a fixed width */
+    height: 150px; /* Set a fixed height */
+    object-fit: cover; /* Crop and scale the image to fit the box */
+    border-radius: 8px; /* Optional: keeps rounded corners - love the rounded corners lol*/
+  }
+  

@@ -27,6 +27,7 @@ h1 {
 
 /* Styling the logo image */
 .logo {
+  padding: auto;
   width: 150px;
   height: auto;
   margin-bottom: 20px;
@@ -41,13 +42,6 @@ h1 {
   100% {
     transform: rotate(360deg);
   }
-}
-
-/* Default logo styling without spin */
-.logo {
-  width: 150px;
-  height: auto;
-  margin-bottom: 20px;
 }
 
 /* Button styling */
@@ -65,7 +59,7 @@ h1 {
 
 /* Shortened URL display */
 .shortened-url {
-  margin-top: 20px;
+  margin-top: 15px;
   font-size: 1.2rem;
 }
 
@@ -95,15 +89,31 @@ h1 {
   border-radius: 10px;
   background-color: #f9f9f9;
   text-align: left;
+  align-items: flex-start;
+}
+
+/* Side-by-Side Layout for Compliance and BeyondSlim */
+/* Adjusting .side-by-side-container */
+.side-by-side-container {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  align-items: flex-start;
+  margin: 100px 30px 0px; /* Remove any bottom margin */
+}
+
+.compliance-certification, .beyond-slim {
+  flex: 1; /* Take equal space in the container */
+  min-width: 300px; /* Setting min. width to keep content readable */
 }
 
 .compliance-certification h2, .beyond-slim h2 {
   font-size: 1.8rem;
-  margin-bottom: 15px;
 }
 
 .compliance-certification p, .beyond-slim p {
   font-size: 1.2rem;
+  margin-bottom: auto;
 }
 
 .compliance-certification ul, .beyond-slim ul {
@@ -145,4 +155,113 @@ h1 {
 
 .scroll-down-button:hover {
   background-color: #0056b3;
+}
+/* Connection Platform Section */
+.connection-platform {
+  text-align: center;
+  padding: 40px 20px;
+  background-color: #f9f9f9;
+  margin-top: 40px;
+}
+
+.connection-platform h2 {
+  font-size: 2rem;
+  color: #1a1a1a;
+  margin-bottom: 10px;
+}
+
+.connection-platform p {
+  font-size: 1.1rem;
+  color: #555;
+  margin-bottom: 20px;
+}
+
+.platform-buttons {
+  margin-bottom: 30px;
+}
+
+.cta-button {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 20px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 5px;
+}
+
+.cta-button.outline {
+  background-color: white;
+  color: #007bff;
+  border: 1px solid #007bff;
+}
+
+.platform-features {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  margin-top: 30px;
+}
+
+.feature-card {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 400px;
+  margin: 15px;
+  text-align: left;
+}
+
+.feature-card h3 {
+  font-size: 1.2rem;
+  color: #007bff;
+}
+
+.feature-card p {
+  font-size: 0.9rem;
+  color: #555;
+}
+
+/* Footer styling */
+.footer {
+  background-color: #333;
+  color: #fff;
+  padding: 20px;
+  text-align: center;
+  margin-top: 0;
+  overflow: hidden;
+  border-top: none;
+  position: absolute; /* Position footer at the bottom */
+  bottom: 0;
+  width: 100%; /* Ensure footer spans the full width of the page */
+}
+
+.footer .social-icons {
+  margin-bottom: 10px;
+}
+
+.footer .social-icons a {
+  color: #ffffff;
+  font-size: 1.5rem;
+  margin: 10px;
+}
+
+.footer-text {
+  font-size: 0.9rem;
+  color: #ccc;
+}
+
+.language-button {
+  background: none;
+  border: 1px solid #ffffff;
+  color: #ffffff;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 0.9rem;
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
+  cursor: pointer;
 }
