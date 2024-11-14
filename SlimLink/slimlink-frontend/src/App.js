@@ -10,6 +10,7 @@ import React, { useState } from 'react';
 import Login from './Pages/Login';
 import About from './Pages/About';
 import Plans from './Pages/Plans';
+import CreateAccount from "./Pages/CreateAccount";
 import logo from './logo.jpeg';
 import NavBar from './NavBar';
 import './App.css';
@@ -183,6 +184,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/about-us" element={<About />} />
           <Route path="/plans" element={<Plans />} />
+          <Route path="/create-account" element={<CreateAccount />} />
           <Route path="/" element={<UrlShortener />} />
         </Routes>
       </Router>
@@ -269,17 +271,8 @@ function App() {
                   <li><a href="#!" className="text-white">Press</a></li>
                 </ul>
               </MDBCol>
-            </MDBRow>
+            </MDBRow>   
           </section>
-        {/* 
-          <section className="mb-4">
-            <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Sunt distinctio earum repellat quaerat
-              voluptatibus placeat nam, commodi optio pariatur est quia magnam eum harum corrupti dicta, aliquam
-              sequi voluptate quas.
-            </p>
-          </section> 
-        */}
 
         </MDBContainer>
         <div className="text-center p-3" style={{ backgroundColor: "rgba(0, 0, 0, 0.2)" }}>
