@@ -1,4 +1,4 @@
-/* CreateAccount.css */
+CreateAccount.css
 
 .container {
     max-width: 400px;
@@ -52,13 +52,13 @@
     background-color: #3b32c6;
   }
   
-  .link {
+  /* .link {
     display: block;
     margin-top: 1rem;
     color: #4f46e5;
     text-decoration: none;
     font-size: 14px;
-  }
+  } */
   
   .link:hover {
     text-decoration: underline;
