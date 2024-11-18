@@ -10,9 +10,8 @@ const teamMembers = [
   {
     name: "Pranav Donepudi",
     title: "Programmer, Front-End Developer",
-    //title: "VP, Financial Planning & Analysis",
     imageUrl: Pranav,
-    bio: "Pranav's bio goes right here.",
+    bio: "Pranav Donepudi is a Master of Computer Science student at Rice University, set to graduate in December 2024. He has a robust foundation in software engineering and experience across various technologies, including Python, Java, JavaScript, and cloud platforms. Pranav has developed projects in areas such as data analysis, web development, and AI integration. His technical skills are complemented by hands-on experience in roles that emphasize problem-solving, system validation, and efficient application design.",
   },
   {
     name: "Anusha Mishra",

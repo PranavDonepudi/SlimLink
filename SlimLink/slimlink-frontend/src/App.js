@@ -10,6 +10,7 @@ import React, { useState } from 'react';
 import Login from './Pages/Login';
 import About from './Pages/About';
 import Plans from './Pages/Plans';
+import CreateAccount from "./Pages/CreateAccount";
 import logo from './logo.jpeg';
 import NavBar from './NavBar';
 import './App.css';
@@ -28,26 +29,69 @@ function UrlShortener() {
   const [shortURL, setShortURL] = useState('');
   const [isSpinning, setIsSpinning] = useState(false);
 
-  const handleSubmit = (e) => {
+  // Receive Long URl, Generate Short URL and then store to database
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    const regularexpress = /^(https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(:\d+)?(\/\S*)?$/;
-    const ifValid =  regularexpress.test(longURL);
 
-    if (ifValid) {
-      function generateShortURL(length = 6) {
-        return `https://sl.to/${[...Array(length)].map(() => Math.random().toString(36)[2]).join('')}`;
+    try {
+      const response = await fetch("http://localhost:5001/shorten", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ longURL })
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setShortURL(data.shortURL);
+      } else {
+        setShortURL("Error: Invalid URL");
       }
-      const shortenedURL = generateShortURL(6);
-      setShortURL(shortenedURL);
-      console.log(generateShortURL);
+    } catch (error) {
+      console.error("Error:", error);
+      setShortURL("Error: Could not connect to server");
+    }
 
-      setIsSpinning(true);
-      setTimeout(() => setIsSpinning(false), 2000);
-    } else {
-      setShortURL("Please Enter A Valid URL!")
-    };
   };
+
+  // Redirect to Origional URL
+  const redirectToOriginalLink = async (e) => {
+    e.preventDefault(); // Prevent the default link behavior
+  
+    const shortCode = shortURL.replace("https://sl.to/", ""); // Extract the short code
+    try {
+      const response = await fetch(`http://localhost:5001/${shortCode}`);
+      
+      if (response.ok) {
+        const data = await response.json();
+        window.open(data.longURL, "_blank"); // Open the original link in a new tab
+      } else {
+        alert("Error: Original URL not found");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("Error: Could not connect to server");
+    }
+  };
+
+  // Get Analytics data
+  const getAnalytics = async () => {
+    try {
+      const shortCode = shortURL.replace("https://sl.to/", ""); // Extract the code part
+      const response = await fetch(`http://localhost:5001/analytics/${shortCode}`);
+      
+      if (response.ok) {
+        const data = await response.json();
+        console.log("Analytics:", data);
+        alert(`Clicks: ${data.clicks}\nLong URL: ${data.longURL}`);
+      } else {
+        alert("Error: Analytics not available for this URL");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("Error: Could not retrieve analytics");
+    }
+  };
+
 
   const scrollIncrement = 0.25; 
   const scrollToBottom = () => {
@@ -82,13 +126,19 @@ function UrlShortener() {
         </div>
         <button type="submit" className="btn btn-primary w-100">Shorten URL</button>
       </form>
-
+      
+      
       {shortURL && (
         <div className="shortened-url">
           <h5>Shortened URL:</h5>
-          <a href={shortURL} target="_blank" rel="noopener noreferrer">{shortURL}</a>
+          <a href={shortURL} target="_blank" onClick={redirectToOriginalLink}>{shortURL}</a>
         </div>
       )}
+
+      {/* Buttom: Check Analytics */}
+      <div className="shortened-url">
+        <button onClick={getAnalytics} className="btn btn-primary w-100">Check Analytics</button>
+      </div>
 
       {/* Slimlink Connection Platform Section */}
       <section className="connection-platform">
@@ -134,6 +184,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/about-us" element={<About />} />
           <Route path="/plans" element={<Plans />} />
+          <Route path="/create-account" element={<CreateAccount />} />
           <Route path="/" element={<UrlShortener />} />
         </Routes>
       </Router>
@@ -220,17 +271,8 @@ function App() {
                   <li><a href="#!" className="text-white">Press</a></li>
                 </ul>
               </MDBCol>
-            </MDBRow>
+            </MDBRow>   
           </section>
-        {/* 
-          <section className="mb-4">
-            <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Sunt distinctio earum repellat quaerat
-              voluptatibus placeat nam, commodi optio pariatur est quia magnam eum harum corrupti dicta, aliquam
-              sequi voluptate quas.
-            </p>
-          </section> 
-        */}
 
         </MDBContainer>
         <div className="text-center p-3" style={{ backgroundColor: "rgba(0, 0, 0, 0.2)" }}>
