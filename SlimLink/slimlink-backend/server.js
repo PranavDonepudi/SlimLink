@@ -5,121 +5,130 @@
 //"rm -rf node_modules package-lock.json" and "npm install"
 
 const express = require('express');
-const mongoose = require('mongoose');
 const cors = require('cors');
 const rateLimit = require('express-rate-limit');
 const useragent = require('express-useragent');
-
-
-
+const { Bigtable } = require('@google-cloud/bigtable');
 
 const app = express();
-//Allow frontend to communicate with backend since they are on different ports
-// app.use(cors());
-const corsOptions = {
-  origin: "http://localhost:3000", 
-  optionsSuccessStatus: 200,
-};
-app.use(cors(corsOptions));
+const projectId = 'rice-comp-539-spring-2022';
+const instanceId = 'comp-539-bigtable';
+
+// Bigtable setup
+const bigtable = new Bigtable({ projectId });
+const instance = bigtable.instance(instanceId);
+const urlTable = instance.table('slimlink-URLs');
+const userMetadataTable = instance.table('slimlink-users');
+
+app.use(cors({ origin: "http://localhost:3000", optionsSuccessStatus: 200 }));
 app.use(express.json());
 app.use(useragent.express());
 
 app.listen(5001, () => console.log("Server running on port 5001"));
 
+// Rate limiter
 const clickLimiter = rateLimit({
-  windowMs: 60 * 60 * 1000, //1 hour
+  windowMs: 60 * 60 * 1000, // 1 hour
   max: 100,
   message: "There are too many clicks from this IP, please try again after an hour."
 });
 app.use('/track-click', clickLimiter);
 
-
-//Connect to local mongodb instance, 27017 is default
-mongoose.connect('mongodb://localhost:27017/slimlink', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-}).then(() => console.log("MongoDB connected"))
-  .catch(err => console.log(err));
-
-const urlSchema = new mongoose.Schema({
-    longURL: { type: String, required: true },
-    shortURL: { type: String, required: true },
-    clicks: { type: Number, default: 0 },  //Tracking number of clicks
-    //analytics array adds an element on click
-    analytics: [
-      {
-        timestamp: { type: Date, default: Date.now },
-        deviceType: { type: String },
-        ipAddress: { type: String }
-      }]
-});
-
-const URL = mongoose.model('URL', urlSchema);
-
-//Generate the shorter link function
+// Generate short URL
 function generateShortURL(length = 6) {
-    return `https://sl.to/${[...Array(length)].map(() => Math.random().toString(36)[2]).join('')}`;
+  return `https://sl.to/${[...Array(length)].map(() => Math.random().toString(36)[2]).join('')}`;
 }
 
-//Shorten URL and init analytics
+// Shorten URL
 app.post('/shorten', async (req, res) => {
-    const { longURL } = req.body;
-  
-    //Validate format
-    const regex = /^(https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(:\d+)?(\/\S*)?$/;
-    if (!regex.test(longURL)) {
-      return res.status(400).json({ error: "Invalid URL" });
-    }
-  
-    //Generate short URL
-    const shortURL = generateShortURL();
-  
-    //Save the long URL, short URL, and initialize clicks to 0
-    const newURL = new URL({ longURL, shortURL, clicks: 0, analytics: [] });
-    await newURL.save();
-  
-    res.json({ shortURL });
+  const { longURL } = req.body;
+
+  const regex = /^(https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(:\d+)?(\/\S*)?$/;
+  if (!regex.test(longURL)) {
+    return res.status(400).json({ error: "Invalid URL" });
+  }
+
+  const shortURL = generateShortURL();
+  const rowKey = shortURL.split('/').pop();
+
+  await urlTable.insert({
+    key: rowKey,
+    data: {
+      metadata: {
+        longURL: longURL,
+        shortURL: shortURL,
+        clicks: 0,
+        createdAt: new Date().toISOString(),
+      },
+    },
+  });
+
+  res.json({ shortURL });
 });
 
-//Route to original link
+// Redirect to original link and track metadata
 app.get('/:shortURL', clickLimiter, async (req, res) => {
-    const { shortURL } = req.params;
-    const deviceType = req.useragent.isMobile ? 'Mobile' : req.useragent.isTablet ? 'Tablet' : 'Desktop';
-    const ipAddress = req.ip;
-    
-    //Find the matching URL by from the short URL
-    const url = await URL.findOne({ shortURL: `https://sl.to/${shortURL}` });
-  
-    if (url) {
-      //Increment the click count
-      url.clicks += 1;
-      url.analytics.push({ deviceType, ipAddress });
-      console.log(`Device Type: ${deviceType}, IP Address: ${ipAddress}`);
-      await url.save(); //Save the updated click count
-      
-      //Redirect to the original long URL
-      res.redirect(url.longURL);
-    } else {
-      res.status(404).json({ error: "URL not found" });
-    }
-  });
+  const { shortURL } = req.params;
+  const deviceType = req.useragent.isMobile ? 'Mobile' : req.useragent.isTablet ? 'Tablet' : 'Desktop';
+  const ipAddress = req.ip;
+  const rowKey = shortURL.split('/').pop();
 
-  //Get analytics
-  app.get('/analytics/:shortURL', async (req, res) => {
-    const { shortURL } = req.params;
-    
-    //Find the URL entry
-    const url = await URL.findOne({ shortURL: `https://sl.to/${shortURL}` });
-    
-    if (url) {
-      res.json({
-        longURL: url.longURL,
-        shortURL: url.shortURL,
-        clicks: url.clicks,
-        analytics: url.analytics
-      });
-    } else {
-      res.status(404).json({ error: "URL not found" });
-    }
-  });
+  const [row] = await urlTable.row(rowKey).get();
+
+  if (row) {
+    const longURL = row.data.metadata.longURL[0].value;
+    const clicks = Number(row.data.metadata.clicks[0].value) + 1;
+
+    // Update click count in URLTable
+    await urlTable.row(rowKey).save({
+      metadata: { clicks: clicks.toString() },
+    });
+
+    // Save user metadata in UserMetadataTable
+    const metadataRowKey = `${rowKey}-${Date.now()}`; // Unique key for each user click
+    await userMetadataTable.insert({
+      key: metadataRowKey,
+      data: {
+        details: {
+          timestamp: new Date().toISOString(),
+          deviceType: deviceType,
+          ipAddress: ipAddress,
+        },
+      },
+    });
+
+    res.redirect(longURL);
+  } else {
+    res.status(404).json({ error: "URL not found" });
+  }
+});
+
+// Get analytics
+app.get('/analytics/:shortURL', async (req, res) => {
+  const { shortURL } = req.params;
+  const rowKey = shortURL.split('/').pop();
+
+  const [urlRow] = await urlTable.row(rowKey).get();
+
+  if (urlRow) {
+    const [metadataRows] = await userMetadataTable.getRows({
+      prefix: rowKey,
+    });
+
+    const analytics = metadataRows.map(row => ({
+      timestamp: row.data.details.timestamp[0].value,
+      deviceType: row.data.details.deviceType[0].value,
+      ipAddress: row.data.details.ipAddress[0].value,
+    }));
+
+    res.json({
+      longURL: urlRow.data.metadata.longURL[0].value,
+      shortURL: urlRow.data.metadata.shortURL[0].value,
+      clicks: Number(urlRow.data.metadata.clicks[0].value),
+      analytics,
+    });
+  } else {
+    res.status(404).json({ error: "URL not found" });
+  }
+});
 
