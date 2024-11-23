@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { auth, googleProvider } from "./firebaseConfig";
-import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
+import { signInWithEmailAndPassword, signInWithPopup, signOut } from "firebase/auth";
 import { Link, useNavigate } from "react-router-dom";
 import "./Login.css";
 
@@ -10,6 +10,9 @@ const Login = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate(); // To handle navigation
+  let activityTimeout; 
+
+  const INACTIVITY_LIMIT = 600 * 1000; // 10 minutes session
 
   // Handle email/password login
   const handleLogin = async (e) => {
@@ -21,6 +24,7 @@ const Login = () => {
       await signInWithEmailAndPassword(auth, email, password);
       alert("Logged in successfully!");
       navigate("/"); // Redirect to home page after login
+      startInactivityTimer(); // Start inactivity timer after login
     } catch (err) {
       setError("Failed to log in. Please check your credentials.");
       console.error("Login error:", err.message);
@@ -36,6 +40,7 @@ const Login = () => {
       await signInWithPopup(auth, googleProvider);
       alert("Logged in with Google successfully!");
       navigate("/"); // Redirect to home page after Google login
+      startInactivityTimer(); // Start inactivity timer after login
     } catch (err) {
       setError("Failed to log in with Google. Please try again.");
       console.error("Google Sign-In error:", err.message);
@@ -43,6 +48,51 @@ const Login = () => {
       setLoading(false);
     }
   };
+
+  // Log out user
+  const handleLogout = async () => {
+    try {
+      console.log("Logging out due to inactivity...");
+      await signOut(auth);
+      alert("You have been logged out due to inactivity.");
+      navigate("/login"); // Redirect to login page after logout
+    } catch (err) {
+      console.error("Logout error:", err.message);
+    }
+  };
+
+  // Start inactivity timer
+  const startInactivityTimer = () => {
+    console.log("Starting inactivity timer...");
+    clearTimeout(activityTimeout); // Clear any existing timer
+    activityTimeout = setTimeout(() => {
+      console.log("Inactivity timeout reached. Logging out...");
+      handleLogout();
+    }, INACTIVITY_LIMIT);
+  };
+
+  // Reset timer on user activity
+  const resetInactivityTimer = () => {
+    console.log("Activity detected. Resetting timer...");
+    startInactivityTimer(); // Restart the timer
+  };
+
+  // Add event listeners for activity tracking
+  useEffect(() => {
+    console.log("Setting up activity listeners...");
+    window.addEventListener("mousemove", resetInactivityTimer);
+    window.addEventListener("keypress", resetInactivityTimer);
+    window.addEventListener("click", resetInactivityTimer);
+
+    // Cleanup event listeners on component unmount
+    return () => {
+      console.log("Cleaning up activity listeners...");
+      window.removeEventListener("mousemove", resetInactivityTimer);
+      window.removeEventListener("keypress", resetInactivityTimer);
+      window.removeEventListener("click", resetInactivityTimer);
+      clearTimeout(activityTimeout); // Clear timeout
+    };
+  }, []);
 
   return (
     <div style={{ maxWidth: "400px", margin: "auto", padding: "2rem" }}>
