@@ -13,9 +13,13 @@ const { Bigtable } = require('@google-cloud/bigtable');
 const app = express();
 const projectId = 'rice-comp-539-spring-2022';
 const instanceId = 'comp-539-bigtable';
+const keyFilename = 'rice-comp-539-spring-2022-49e004df53c3.json';
 
 // Bigtable setup
-const bigtable = new Bigtable({ projectId });
+const bigtable = new Bigtable({
+  projectId,
+  keyFilename,
+});
 const instance = bigtable.instance(instanceId);
 const urlTable = instance.table('slimlink-URLs');
 const userMetadataTable = instance.table('slimlink-users');
