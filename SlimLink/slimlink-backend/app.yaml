@@ -1,0 +1,12 @@
+runtime: nodejs18 
+instance_class: F2 
+env_variables:
+  NODE_ENV: "production"
+  BIGTABLE_PROJECT_ID: "rice-comp-539-spring-2022"
+  BIGTABLE_INSTANCE_ID: "comp-539-bigtable"
+  BIGTABLE_KEYFILE: "rice-comp-539-spring-2022-49e004df53c3.json"
+  RATE_LIMIT_WINDOW_MS: "3600000" 
+  RATE_LIMIT_MAX: "100" 
+handlers:
+  - url: /.*
+    script: auto

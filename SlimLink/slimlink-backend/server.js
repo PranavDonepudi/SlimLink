@@ -11,15 +11,14 @@ const useragent = require('express-useragent');
 const { Bigtable } = require('@google-cloud/bigtable');
 
 const app = express();
-const projectId = 'rice-comp-539-spring-2022';
-const instanceId = 'comp-539-bigtable';
-const keyFilename = 'rice-comp-539-spring-2022-49e004df53c3.json';
+
+// Fetch values from environment variables
+const projectId = process.env.BIGTABLE_PROJECT_ID;
+const instanceId = process.env.BIGTABLE_INSTANCE_ID;
+const keyFilename = process.env.BIGTABLE_KEYFILE;
 
 // Bigtable setup
-const bigtable = new Bigtable({
-  projectId,
-  keyFilename,
-});
+const bigtable = new Bigtable({ projectId, keyFilename });
 const instance = bigtable.instance(instanceId);
 const urlTable = instance.table('slimlink-URLs');
 const userMetadataTable = instance.table('slimlink-users');
