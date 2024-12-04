@@ -33,9 +33,15 @@ app.listen(5001, () => console.log("Server running on port 5001"));
 const clickLimiter = rateLimit({
   windowMs: 60 * 60 * 1000, // 1 hour
   max: 100,
-  message: "There are too many clicks from this IP, please try again after an hour."
+  message: "This IP has tried to access this link too many times, please try again after an hour."
 });
 app.use('/track-click', clickLimiter);
+
+const shortenLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000, //1 hour
+  max: 50, //Limit to 50 URL shortening requests per IP per hour
+  message: "You have exceeded the limit of 50 URL shortening requests per hour. Please try again later.",
+});
 
 // Generate short URL
 function generateShortURL(length = 6) {
@@ -43,7 +49,7 @@ function generateShortURL(length = 6) {
 }
 
 // Shorten URL
-app.post('/shorten', async (req, res) => {
+app.post('/shorten', shortenLimiter, async (req, res) => {
   const { longURL } = req.body;
 
   const regex = /^(https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(:\d+)?(\/\S*)?$/;
