@@ -17,6 +17,7 @@ SlimLink is a simple URL shortening service built using React for the frontend. 
 - **React**: Frontend library used to build a responsive and interactive UI.
 - **Bootstrap**: Used for styling and creating a responsive layout.
 - **HTML/CSS**: Custom styling for elements like the logo and NavBar.
+- **FireBase**: Google-backed platform that help for User Login Authentication. 
 
 ## Getting Started
 
