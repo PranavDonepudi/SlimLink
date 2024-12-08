@@ -39,8 +39,8 @@ const Login = () => {
       setLoading(true);
       await signInWithPopup(auth, googleProvider);
       alert("Logged in with Google successfully!");
-      navigate("/"); // Redirect to home page after Google login
-      startInactivityTimer(); // Start inactivity timer after login
+      navigate("/"); 
+      startInactivityTimer(); 
     } catch (err) {
       setError("Failed to log in with Google. Please try again.");
       console.error("Google Sign-In error:", err.message);
@@ -52,9 +52,9 @@ const Login = () => {
   // Log out user
   const handleLogout = async () => {
     try {
-      console.log("Logging out due to inactivity...");
+      console.log("Logging out, Session Expired.");
       await signOut(auth);
-      alert("You have been logged out due to inactivity.");
+      alert("You have been logged out.");
       navigate("/login"); // Redirect to login page after logout
     } catch (err) {
       console.error("Logout error:", err.message);
