@@ -23,8 +23,8 @@ const Login = () => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
       alert("Logged in successfully!");
-      navigate("/"); // Redirect to home page after login
-      startInactivityTimer(); // Start inactivity timer after login
+      navigate("/"); 
+      startInactivityTimer(); 
     } catch (err) {
       setError("Failed to log in. Please check your credentials.");
       console.error("Login error:", err.message);
@@ -64,17 +64,17 @@ const Login = () => {
   // Start inactivity timer
   const startInactivityTimer = () => {
     console.log("Starting inactivity timer...");
-    clearTimeout(activityTimeout); // Clear any existing timer
+    clearTimeout(activityTimeout); 
     activityTimeout = setTimeout(() => {
-      console.log("Inactivity timeout reached. Logging out...");
+      console.log("Timer limit reached. Logging out");
       handleLogout();
     }, INACTIVITY_LIMIT);
   };
 
   // Reset timer on user activity
   const resetInactivityTimer = () => {
-    console.log("Activity detected. Resetting timer...");
-    startInactivityTimer(); // Restart the timer
+    console.log("Activity detected. Resetting timer");
+    startInactivityTimer(); 
   };
 
   // Add event listeners for activity tracking
@@ -90,7 +90,7 @@ const Login = () => {
       window.removeEventListener("mousemove", resetInactivityTimer);
       window.removeEventListener("keypress", resetInactivityTimer);
       window.removeEventListener("click", resetInactivityTimer);
-      clearTimeout(activityTimeout); // Clear timeout
+      clearTimeout(activityTimeout); 
     };
   }, []);
 
