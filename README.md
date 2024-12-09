@@ -1,11 +1,11 @@
 # SlimLink URL Shortener
 
 ## Project Overview
-SlimLink is a simple URL shortening service built using React for the frontend. Users can input long URLs, and the app will generate a shortened URL. The project currently includes a responsive, user-friendly interface with a NavBar, input field for the long URL, and functionality to display the shortened URL.
+SlimLink is a simple URL shortening service built using React for the frontend. Users can input long URLs, and the app will generate a shortened URL. SlimLink is designed to simplify link sharing by transforming long URLs into concise, shareable links while offering detailed analytics. This platform include an intuitive frontend interface for receiving user input URLs and a robust backend that processes requests. Users can track clicks, analyze geolocation through IP addresses, and identify device types that accessing their links, all through a user-friendly dashboard. With its seamless integration of frontend and backend systems, SlimLink provides a comprehensive process for efficient URL management and insightful usage tracking.
 
 ## Features
 - **Responsive Design**: The app layout adjusts to different screen sizes using Bootstrap.
-- **URL Input**: Users can enter long URLs, which will be shortened (currently simulated in the frontend).
+- **URL Input & Validation Check **: Users can enter long URLs, and the the algorhtim will auto detect whether input URL is valid.
 - **Shortened URL Display**: The app displays the shortened URL after submission.
 - **NavBar**: Includes navigation links for "About Us", "Plans", and "Login".
 - **Logo**: Displays a custom logo in the NavBar and above the main heading.
@@ -25,7 +25,7 @@ SlimLink is a simple URL shortening service built using React for the frontend. 
 - **React**: Frontend library used to build a responsive and interactive UI.
 - **Bootstrap**: Used for styling and creating a responsive layout.
 - **HTML/CSS**: Custom styling for elements like the logo and NavBar.
-- **Firebase**: Google-backed platform that help for User Login Authentication.
+- **Firebase**: High secure for User Login Authentication and allow user login via Google platform.
 - **Bigtable**: Store data include URL(Origional & Shortened) Analysis(Clicks, Geographic location, device type, IP.
 
 ## Getting Started
