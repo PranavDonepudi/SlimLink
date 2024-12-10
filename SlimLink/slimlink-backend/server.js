@@ -9,6 +9,7 @@ const cors = require('cors');
 const rateLimit = require('express-rate-limit');
 const useragent = require('express-useragent');
 const { Bigtable } = require('@google-cloud/bigtable');
+const Memcached = require('memcached');
 
 const app = express();
 
@@ -22,6 +23,9 @@ const bigtable = new Bigtable({ projectId, keyFilename });
 const instance = bigtable.instance(instanceId);
 const urlTable = instance.table('slimlink-URLs');
 const userMetadataTable = instance.table('slimlink-users');
+
+// Memcached setup
+const memcached = new Memcached('localhost:7001'); // Adjusted the port as needed
 
 app.use(cors({ origin: "http://localhost:3000", optionsSuccessStatus: 200 }));
 app.use(express.json());
@@ -60,6 +64,7 @@ app.post('/shorten', shortenLimiter, async (req, res) => {
   const shortURL = generateShortURL();
   const rowKey = shortURL.split('/').pop();
 
+  // Store in Bigtable
   await urlTable.insert({
     key: rowKey,
     data: {
@@ -72,6 +77,11 @@ app.post('/shorten', shortenLimiter, async (req, res) => {
     },
   });
 
+  // Cache in Memcached
+  memcached.set(rowKey, longURL, 3600, (err) => { // Cache for 1 hour
+    if (err) console.error("Memcached error:", err);
+  });
+
   res.json({ shortURL });
 });
 
@@ -82,34 +92,47 @@ app.get('/:shortURL', clickLimiter, async (req, res) => {
   const ipAddress = req.ip;
   const rowKey = shortURL.split('/').pop();
 
-  const [row] = await urlTable.row(rowKey).get();
+  // Check cache first
+  memcached.get(rowKey, async (err, longURL) => {
+    if (err) {
+      console.error("Memcached error:", err);
+    }
+    
+    if (longURL) {
+      // Long URL found in cache
+      res.redirect(longURL);
+    } else {
+      // Fetch from Bigtable
+      const [row] = await urlTable.row(rowKey).get();
+      if (row) {
+        longURL = row.data.metadata.longURL[0].value;
 
-  if (row) {
-    const longURL = row.data.metadata.longURL[0].value;
-    const clicks = Number(row.data.metadata.clicks[0].value) + 1;
+        // Update cache
+        memcached.set(rowKey, longURL, 3600, (err) => {
+          if (err) console.error("Memcached error:", err);
+        });
 
-    // Update click count in URLTable
-    await urlTable.row(rowKey).save({
-      metadata: { clicks: clicks.toString() },
-    });
+        const clicks = Number(row.data.metadata.clicks[0].value) + 1;
+        await urlTable.row(rowKey).save({ metadata: { clicks: clicks.toString() } });
 
-    // Save user metadata in UserMetadataTable
-    const metadataRowKey = `${rowKey}-${Date.now()}`; // Unique key for each user click
-    await userMetadataTable.insert({
-      key: metadataRowKey,
-      data: {
-        details: {
-          timestamp: new Date().toISOString(),
-          deviceType: deviceType,
-          ipAddress: ipAddress,
-        },
-      },
-    });
+        const metadataRowKey = `${rowKey}-${Date.now()}`;
+        await userMetadataTable.insert({
+          key: metadataRowKey,
+          data: {
+            details: {
+              timestamp: new Date().toISOString(),
+              deviceType: deviceType,
+              ipAddress: ipAddress,
+            },
+          },
+        });
 
-    res.redirect(longURL);
-  } else {
-    res.status(404).json({ error: "URL not found" });
-  }
+        res.redirect(longURL);
+      } else {
+        res.status(404).json({ error: "URL not found" });
+      }
+    }
+  });
 });
 
 // Get analytics
@@ -117,27 +140,40 @@ app.get('/analytics/:shortURL', async (req, res) => {
   const { shortURL } = req.params;
   const rowKey = shortURL.split('/').pop();
 
-  const [urlRow] = await urlTable.row(rowKey).get();
+  // Check cache for analytics
+  memcached.get(`${rowKey}-analytics`, async (err, cachedAnalytics) => {
+    if (err) console.error("Memcached error:", err);
 
-  if (urlRow) {
-    const [metadataRows] = await userMetadataTable.getRows({
-      prefix: rowKey,
-    });
+    if (cachedAnalytics) {
+      res.json(JSON.parse(cachedAnalytics));
+    } else {
+      // Fetch from Bigtable
+      const [urlRow] = await urlTable.row(rowKey).get();
+      if (urlRow) {
+        const [metadataRows] = await userMetadataTable.getRows({ prefix: rowKey });
 
-    const analytics = metadataRows.map(row => ({
-      timestamp: row.data.details.timestamp[0].value,
-      deviceType: row.data.details.deviceType[0].value,
-      ipAddress: row.data.details.ipAddress[0].value,
-    }));
+        const analytics = metadataRows.map(row => ({
+          timestamp: row.data.details.timestamp[0].value,
+          deviceType: row.data.details.deviceType[0].value,
+          ipAddress: row.data.details.ipAddress[0].value,
+        }));
 
-    res.json({
-      longURL: urlRow.data.metadata.longURL[0].value,
-      shortURL: urlRow.data.metadata.shortURL[0].value,
-      clicks: Number(urlRow.data.metadata.clicks[0].value),
-      analytics,
-    });
-  } else {
-    res.status(404).json({ error: "URL not found" });
-  }
+        const response = {
+          longURL: urlRow.data.metadata.longURL[0].value,
+          shortURL: urlRow.data.metadata.shortURL[0].value,
+          clicks: Number(urlRow.data.metadata.clicks[0].value),
+          analytics,
+        };
+
+        // Cache analytics
+        memcached.set(`${rowKey}-analytics`, JSON.stringify(response), 900, (err) => { // Cache for 15 minutes
+          if (err) console.error("Memcached error:", err);
+        });
+
+        res.json(response);
+      } else {
+        res.status(404).json({ error: "URL not found" });
+      }
+    }
+  });
 });
-
