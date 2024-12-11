@@ -64,10 +64,6 @@ Ensure you have the following installed:
 4. **Creat Accout**: Click "Login" button on top right conor on the navigation bar, Then, click Create one here to create an account.
 5. **Login**: Click Login button on top right conor on the navigation bar, Enter Email and password. Or Click "Login with Google" to login with your google account.
 
-## Roadmap
-- **Backend Integration**: Currently, the URL shortening process is simulated. The next step is to integrate with a backend service to handle URL shortening.
-- **User Authentication**: Add login functionality to allow users to manage their shortened URLs.
-- **Plans**: Introduce different plans for users with additional features (e.g., analytics, custom domains).
 
 ## Contributing
 We welcome contributions! Please feel free to submit pull requests or open issues.
