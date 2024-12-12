@@ -25,7 +25,7 @@ const urlTable = instance.table('slimlink-URLs');
 const userMetadataTable = instance.table('slimlink-users');
 
 // Memcached setup
-const memcached = new Memcached('localhost:7001'); // Adjusted the port as needed
+const memcached = new Memcached('localhost:7001');
 
 app.use(cors({ origin: "http://localhost:3000", optionsSuccessStatus: 200 }));
 app.use(express.json());
@@ -43,13 +43,39 @@ app.use('/track-click', clickLimiter);
 
 const shortenLimiter = rateLimit({
   windowMs: 60 * 60 * 1000, //1 hour
-  max: 50, //Limit to 50 URL shortening requests per IP per hour
+  max: 50, // Limit to 50 URL shortening requests per IP per hour
   message: "You have exceeded the limit of 50 URL shortening requests per hour. Please try again later.",
 });
 
 // Generate short URL
 function generateShortURL(length = 6) {
   return `https://sl.to/${[...Array(length)].map(() => Math.random().toString(36)[2]).join('')}`;
+}
+
+// Update analytics
+async function updateAnalytics(rowKey, deviceType, ipAddress) {
+  try {
+    const [row] = await urlTable.row(rowKey).get();
+
+    if (row) {
+      const clicks = Number(row.data.metadata.clicks[0].value) + 1;
+      await urlTable.row(rowKey).save({ metadata: { clicks: clicks.toString() } });
+
+      const metadataRowKey = `${rowKey}-${Date.now()}`;
+      await userMetadataTable.insert({
+        key: metadataRowKey,
+        data: {
+          details: {
+            timestamp: new Date().toISOString(),
+            deviceType: deviceType,
+            ipAddress: ipAddress,
+          },
+        },
+      });
+    }
+  } catch (err) {
+    console.error("Error updating analytics:", err);
+  }
 }
 
 // Shorten URL
@@ -97,9 +123,10 @@ app.get('/:shortURL', clickLimiter, async (req, res) => {
     if (err) {
       console.error("Memcached error:", err);
     }
-    
+
     if (longURL) {
       // Long URL found in cache
+      await updateAnalytics(rowKey, deviceType, ipAddress); // Update analytics
       res.redirect(longURL);
     } else {
       // Fetch from Bigtable
@@ -112,21 +139,7 @@ app.get('/:shortURL', clickLimiter, async (req, res) => {
           if (err) console.error("Memcached error:", err);
         });
 
-        const clicks = Number(row.data.metadata.clicks[0].value) + 1;
-        await urlTable.row(rowKey).save({ metadata: { clicks: clicks.toString() } });
-
-        const metadataRowKey = `${rowKey}-${Date.now()}`;
-        await userMetadataTable.insert({
-          key: metadataRowKey,
-          data: {
-            details: {
-              timestamp: new Date().toISOString(),
-              deviceType: deviceType,
-              ipAddress: ipAddress,
-            },
-          },
-        });
-
+        await updateAnalytics(rowKey, deviceType, ipAddress); // Update analytics
         res.redirect(longURL);
       } else {
         res.status(404).json({ error: "URL not found" });
