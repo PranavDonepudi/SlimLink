@@ -78,11 +78,33 @@ function UrlShortener() {
     try {
       const shortCode = shortURL.replace("https://sl.to/", ""); // Extract the code part
       const response = await fetch(`http://localhost:5001/analytics/${shortCode}`);
-      
+  
       if (response.ok) {
         const data = await response.json();
-        console.log("Analytics:", data);
-        alert(`Clicks: ${data.clicks}\nLong URL: ${data.longURL}`);
+  
+        // Helper function to format objects into readable strings
+        const formatData = (obj, indent = 2) => {
+          if (typeof obj !== "object" || obj === null) {
+            return obj; // Return primitive values as-is
+          }
+          let formattedString = "";
+          for (const [key, value] of Object.entries(obj)) {
+            const spaces = " ".repeat(indent);
+            if (typeof value === "object" && value !== null) {
+              formattedString += `${spaces}${key}:\n${formatData(value, indent + 2)}\n`;
+            } else {
+              formattedString += `${spaces}${key}: ${value}\n`;
+            }
+          }
+          return formattedString.trim();
+        };
+  
+        // Format analytics details
+        let analyticsDetails = `Analytics for URL ${shortURL}:\n\n`;
+        analyticsDetails += formatData(data);
+  
+        console.log("Analytics:", data); // Log full analytics in the console
+        alert(analyticsDetails); // Display all analytics in a readable format
       } else {
         alert("Error: Analytics not available for this URL");
       }
